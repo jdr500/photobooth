@@ -2,6 +2,8 @@ var capture;
 
 var tempW = 10;
 
+var customFilter;
+
 function setup() {
   createCanvas(640, 600);
   capture = createCapture(VIDEO);
@@ -38,6 +40,21 @@ function draw() {
         fill(r, g, b);
         ellipse(capture.width - x - (.5 * tempW), y + (.5 * tempW), tempW, tempW);
       }
+    }
+  }
+}
+
+function imageFilter() {
+  this.state = 0;
+  this.display = function() {
+    //use real image
+    if(this.state === 0) {
+      //might have to do long way if use mirror
+      image(capture,0,0);
+    } else {
+    //use pointalism
+    //check which filters to use
+      
     }
   }
 }

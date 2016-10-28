@@ -38,8 +38,6 @@ function mousePressed() {
 
   // push it to the screenshots array
   screenshots.push(screenshot);
-
-  currentFilter.state = 1;
 }
 
 function camFilter() {

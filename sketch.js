@@ -4,11 +4,12 @@ var screenshots = [];
 var oldpos = 0;
 var newpos = 0;
 var oldend = 640;
-var left, right;
+var left, right, space;
 
 function preload() {
   left = loadImage('assets/left.png');
   right = loadImage('assets/right.png');
+  space = loadImage('assets/spacebar.png');
 }
 
 function setup() {
@@ -203,6 +204,7 @@ function displayScreenshots() {
     imageMode(CENTER);
     image(left, 30, 540, 40, 40);
     image(right, 610, 540, 40, 40);
+    image(space, 320, 380, 250, 75);
     pop();
   }
 }

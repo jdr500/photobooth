@@ -16,7 +16,7 @@ function setup() {
   createCanvas(640, 600);
   capture = createCapture(VIDEO);
   capture.hide();
-  capture.size(640,480);
+  capture.size(640, 480);
   noStroke();
   background(0);
 }
@@ -66,6 +66,17 @@ function mousePressed() {
   screenshots.push(screenshot);
 }
 
+function camFilter() {
+  this.state; // 0 is Normal Video Feed, 1 is Pointilism
+  this.shape = {
+    
+  };
+  this.color;
+  this.opacity;
+  this.display = function() {
+    // if
+  }
+}
 
 function normalVideoFeed() {
   background(51);
@@ -114,13 +125,13 @@ function displayScreenshots() {
   // we might need an extra part to display
   // the thumbnails on the screen if
   // they are clicked
-  
+
   // this is the scrolling part
   // it checks the old left pos
   // and the old right pos to
   // align the translate() func
   // with the variable newpos
-  
+
   // it has a variable speed
   // named shiftspeed
   var shiftspeed = 20;
@@ -141,7 +152,7 @@ function displayScreenshots() {
     }
     console.log('screen is at: ' + oldpos + ', ' + oldend);
   }
-  
+
   // this is the second part 
   // of the display function
   // 

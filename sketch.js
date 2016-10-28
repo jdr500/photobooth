@@ -196,6 +196,12 @@ function displayScreenshots() {
   // it displays photos and 
   // cursors on the screen
   // 
+  if (screenshots.length < 1) {
+    push();
+    imageMode(CENTER);
+    image(space, 320, 540, 250, 75);
+    pop();
+  }
   if (screenshots.length > 0) {
     push();
     translate(newpos, 0);
@@ -207,7 +213,6 @@ function displayScreenshots() {
     imageMode(CENTER);
     image(left, 30, 540, 40, 40);
     image(right, 610, 540, 40, 40);
-    image(space, 320, 430, 250, 75);
     pop();
   }
 }

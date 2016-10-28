@@ -209,3 +209,14 @@ function displayScreenshots() {
     pop();
   }
 }
+
+function keyTyped() {
+  if (keyCode == 32) {
+    // copy what's on the canvas
+    var screenshot = get(0, 0, 640, 480);
+
+    // push it to the screenshots array
+    screenshots.push(screenshot);
+
+  }
+  

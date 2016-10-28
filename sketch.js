@@ -4,12 +4,11 @@ var screenshots = [];
 var oldpos = 0;
 var newpos = 0;
 var oldend = 640;
-var left, right, space;
+var left, right;
 
 function preload() {
   left = loadImage('assets/left.png');
   right = loadImage('assets/right.png');
-  space = loadImage('assets/spacebar.png');
 }
 
 function setup() {
@@ -19,7 +18,7 @@ function setup() {
   capture.hide();
   capture.size(640, 480);
   noStroke();
-  background(0);
+  background(255);
   
 }
 
@@ -39,13 +38,15 @@ function mousePressed() {
 
   // push it to the screenshots array
   screenshots.push(screenshot);
+  
+  currentFilter.state = 1;
 }
 
 function camFilter() {
   this.state = 0; // 0 is Normal Video Feed, 1 is Pointilism
   this.shape = {
-    type: null,
-    size: null
+    type: "ellipse",
+    size: 10
   };
   this.color = "normal";
   this.opacity;
@@ -54,13 +55,14 @@ function camFilter() {
     if(this.state === 0) {
       normalVideoFeed(this.color);
     } else {
+      background(255);
       shapeVideoFeed(this.color,this.shape);
     }
   }
 }
 
 function normalVideoFeed(colors) {
-  background(51);
+  background(255);
   loadPixels();
   capture.loadPixels();
   if (capture.pixels.length > 0) {
@@ -204,7 +206,6 @@ function displayScreenshots() {
     imageMode(CENTER);
     image(left, 30, 540, 40, 40);
     image(right, 610, 540, 40, 40);
-    image(space, 320, 380, 250, 75);
     pop();
   }
 }

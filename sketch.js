@@ -22,6 +22,7 @@ function setup() {
 }
 
 function draw() {
+  
   normalVideoFeed();
   displayScreenshots();
   // // expose the pixel array in our video stream
@@ -67,7 +68,7 @@ function mousePressed() {
 }
 
 
-function normalVideoFeed() {
+function normalVideoFeed(state) {
   background(51);
   loadPixels();
   capture.loadPixels();
@@ -92,13 +93,27 @@ function normalVideoFeed() {
         var end = capture.pixels.length;
         var index2 = end - (x + capture.width * capture.height - y * capture.width) * 4 - 4;
         var index = (x + y * capture.width) * 4;
-        var r = capture.pixels[index + 0];
-        var g = capture.pixels[index + 1];
-        var b = capture.pixels[index + 2];
-
-        pixels[index + 0] = capture.pixels[index2 + 0];
-        pixels[index + 1] = capture.pixels[index2 + 1];
-        pixels[index + 2] = capture.pixels[index2 + 2];
+        
+        var r = capture.pixels[index2 + 0];
+        var g = capture.pixels[index2 + 1];
+        var b = capture.pixels[index2 + 2];
+        
+        if (state == 'normal') {
+          // don't do anything, rgb is fine
+        } else if (state == 'xray') {
+          // do 255 - r, 255 - g, 255 - b
+          r = 255 - r;
+          g = 255 - g;
+          b = 255 - b;
+        } else if (state == 'grayscale') {
+          r = (r+g+b)/3;
+          g = r;
+          b = r;
+        }
+        
+        pixels[index + 0] = r;
+        pixels[index + 1] = g;
+        pixels[index + 2] = b;
         pixels[index + 3] = 255;
       }
     }

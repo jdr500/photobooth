@@ -1,5 +1,5 @@
 var capture;
-var tempW = 10;
+var currentFilter = new camFilter();
 var screenshots = [];
 var oldpos = 0;
 var newpos = 0;
@@ -19,41 +19,14 @@ function setup() {
   capture.size(640, 480);
   noStroke();
   background(0);
+  
 }
 
 function draw() {
   
-  normalVideoFeed();
+  currentFilter.display();
   displayScreenshots();
-  // // expose the pixel array in our video stream
-  // capture.loadPixels();
-
-  // // make sure we have a valid frame of video by ensuring that there is data
-  // // in this array
-  // if (capture.pixels.length > 0) {
-
-  //   console.log(capture.width + ", " + capture.height);
-  //   console.log(capture.pixels.length);
-
-  //   // iterate over the pixel array
-  //   for (var x = 0; x < capture.width; x += tempW) {
-  //     for (var y = 0; y < capture.height; y += tempW) {
-
-  //       // compute the location in our array (the array is a one dimensional array
-  //       // that contains 4 slots per pixel - R,G,B,A)
-  //       var loc = (y * capture.width + x) * 4;
-
-  //       // extract the colors here
-  //       var r = capture.pixels[loc];
-  //       var g = capture.pixels[loc+1];
-  //       var b = capture.pixels[loc+2];
-
-  //       // draw an ellipse using this color
-  //       fill(r, g, b);
-  //       ellipse(capture.width - x - (.5 * tempW), y + (.5 * tempW), tempW, tempW);
-  //     }
-  //   }
-  // }
+  
 }
 
 
@@ -65,33 +38,41 @@ function mousePressed() {
 
   // push it to the screenshots array
   screenshots.push(screenshot);
+
+  currentFilter.state = 1;
 }
 
 function camFilter() {
-  this.state; // 0 is Normal Video Feed, 1 is Pointilism
+  this.state = 0; // 0 is Normal Video Feed, 1 is Pointilism
   this.shape = {
-    
+    type: null,
+    size: null
   };
-  this.color;
+  this.color = "normal";
   this.opacity;
   this.display = function() {
-    // if
+    console.log("display");
+    if(this.state === 0) {
+      normalVideoFeed(this.color);
+    } else {
+      shapeVideoFeed(this.color,this.shape);
+    }
   }
 }
 
-function normalVideoFeed(state) {
+function normalVideoFeed(colors) {
   background(51);
   loadPixels();
   capture.loadPixels();
   if (capture.pixels.length > 0) {
     // console.log(capture.width + ", "+ capture.height);
     // console.log(capture.pixels.length);
-    var skip;
-    if (mouseY < 480) {
-      skip = int(map(mouseX, 0, width, 1, 10));
-    } else {
-      skip = 1;
-    }
+    var skip = 1;
+    // if (mouseY < 480) {
+    //   skip = int(map(mouseX, 0, width, 1, 10));
+    // } else {
+    //   skip = 1;
+    // }
     for (var y = 0; y < capture.height; y += skip) {
       for (var x = 0; x < capture.width; x += skip) {
         // y * width offsets our x value
@@ -109,14 +90,14 @@ function normalVideoFeed(state) {
         var g = capture.pixels[index2 + 1];
         var b = capture.pixels[index2 + 2];
         
-        if (state == 'normal') {
+        if (colors == 'normal') {
           // don't do anything, rgb is fine
-        } else if (state == 'xray') {
+        } else if (colors == 'xray') {
           // do 255 - r, 255 - g, 255 - b
           r = 255 - r;
           g = 255 - g;
           b = 255 - b;
-        } else if (state == 'grayscale') {
+        } else if (colors == 'grayscale') {
           r = (r+g+b)/3;
           g = r;
           b = r;
@@ -129,6 +110,45 @@ function normalVideoFeed(state) {
       }
     }
     updatePixels();
+  }
+}
+
+//shape is a shape object with 2 properties = type, size
+function shapeVideoFeed(colors, shape) {
+  // expose the pixel array in our video stream
+  capture.loadPixels();
+
+  // make sure we have a valid frame of video by ensuring that there is data
+  // in this array
+  if (capture.pixels.length > 0) {
+
+    console.log(capture.width + ", " + capture.height);
+    console.log(capture.pixels.length);
+
+    // iterate over the pixel array
+    for (var x = 0; x < capture.width; x += shape.size) {
+      for (var y = 0; y < capture.height; y += shape.size) {
+
+        // compute the location in our array (the array is a one dimensional array
+        // that contains 4 slots per pixel - R,G,B,A)
+        var loc = (y * capture.width + x) * 4;
+
+        // extract the colors here
+        var r = capture.pixels[loc];
+        var g = capture.pixels[loc+1];
+        var b = capture.pixels[loc+2];
+
+
+        // draw an ellipse using this color
+        fill(r, g, b);
+        
+        if(shape.type == "ellipse") {
+          ellipse(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
+        } else if(shape.type == "rect") {
+          rect(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
+        }
+      }
+    }
   }
 }
 

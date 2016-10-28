@@ -12,9 +12,11 @@ function preload() {
 }
 
 function setup() {
+  pixelDensity(1);
   createCanvas(640, 600);
   capture = createCapture(VIDEO);
   capture.hide();
+  capture.size(640,480);
   noStroke();
   background(0);
 }

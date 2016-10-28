@@ -219,4 +219,4 @@ function keyTyped() {
     screenshots.push(screenshot);
 
   }
-  
+}

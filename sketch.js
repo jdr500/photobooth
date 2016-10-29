@@ -5,6 +5,7 @@ var oldpos = 0;
 var newpos = 0;
 var oldend = 640;
 var left, right, space;
+var count = 1; //for saving the images
 
 function preload() {
   left = loadImage('assets/left.png');
@@ -14,7 +15,7 @@ function preload() {
 
 function setup() {
   pixelDensity(1);
-  createCanvas(640, 600);
+  var canvas = createCanvas(640, 600);
   capture = createCapture(VIDEO);
   capture.hide();
   capture.size(640, 480);
@@ -35,6 +36,17 @@ function draw() {
 
 function mousePressed() {
   currentFilter.state = 1;
+  if (currentFilter.state == 1) {
+    console.log('reaching here');
+     if (currentFilter.color == "normal") {
+       console.log('reaching here');
+       currentFilter.color = "grayscale";
+     } else if (currentFilter.color == "grayscale") {
+       currentFilter.color = "xray";
+     } else if (currentFilter.color == "xray") {
+       currentFilter.color = "normal";
+     }
+  }
 }
 
 function camFilter() {
@@ -42,13 +54,13 @@ function camFilter() {
                // 0 means we're checking the screenshots
   this.state = 0; // 0 is Normal Video Feed, 1 is Pointilism
   this.shape = {
-    type: "rect",
+    type: "ellipse",
     size: 10
   };
   this.color = "normal";
   this.opacity;
   this.display = function() {
-    console.log("display");
+    // console.log("display");
     if(this.state === 0) {
       normalVideoFeed(this.color);
     } else {
@@ -120,8 +132,8 @@ function shapeVideoFeed(colors, shape) {
   // in this array
   if (capture.pixels.length > 0) {
 
-    console.log(capture.width + ", " + capture.height);
-    console.log(capture.pixels.length);
+    // console.log(capture.width + ", " + capture.height);
+    // console.log(capture.pixels.length);
 
     // iterate over the pixel array
     for (var x = 0; x < capture.width; x += shape.size) {
@@ -135,7 +147,19 @@ function shapeVideoFeed(colors, shape) {
         var r = capture.pixels[loc];
         var g = capture.pixels[loc+1];
         var b = capture.pixels[loc+2];
-
+        
+        if (colors == 'normal') {
+          // don't do anything, rgb is fine
+        } else if (colors == 'xray') {
+          // do 255 - r, 255 - g, 255 - b
+          r = 255 - r;
+          g = 255 - g;
+          b = 255 - b;
+        } else if (colors == 'grayscale') {
+          r = (r+g+b)/3;
+          g = r;
+          b = r;
+        }
 
         // draw an ellipse using this color
         fill(r, g, b);
@@ -184,7 +208,7 @@ function displayScreenshots() {
         oldend += shiftspeed;
       }
     }
-    console.log('screen is at: ' + oldpos + ', ' + oldend);
+    // console.log('screen is at: ' + oldpos + ', ' + oldend);
   }
 
   // this is the second part 
@@ -225,7 +249,9 @@ function keyTyped() {
   }
   if (key === 's') {
     // save something
-    save(screenshots[screenshots.length-1].shot, 'myImage.png');
+    save(screenshots[screenshots.length-1].shot, 'myImage' + count + '.png');
+    console.log('image saved!');
+    count++;
   }
 }
 

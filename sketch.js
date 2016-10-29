@@ -34,19 +34,15 @@ function draw() {
 
 
 function mousePressed() {
-  // copy what's on the canvas
-  var screenshot = get(0, 0, 640, 480);
-
-  // push it to the screenshots array
-  screenshots.push(screenshot);
-  
   currentFilter.state = 1;
 }
 
 function camFilter() {
+  this.on = 1; // 1 means that live video feed is playing, 
+               // 0 means we're checking the screenshots
   this.state = 0; // 0 is Normal Video Feed, 1 is Pointilism
   this.shape = {
-    type: "ellipse",
+    type: "rect",
     size: 10
   };
   this.color = "normal";
@@ -147,6 +143,7 @@ function shapeVideoFeed(colors, shape) {
         if(shape.type == "ellipse") {
           ellipse(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
         } else if(shape.type == "rect") {
+          rectMode(CENTER);
           rect(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
         }
       }
@@ -206,7 +203,7 @@ function displayScreenshots() {
     push();
     translate(newpos, 0);
     for (var i = 0; i < screenshots.length; i++) {
-      image(screenshots[i], i * 160, 480, 160, 120);
+      image(screenshots[screenshots.length-1-i].shot, i * 160, 480, 160, 120);
     }
     pop();
     push();
@@ -220,10 +217,22 @@ function displayScreenshots() {
 function keyTyped() {
   if (keyCode == 32) {
     // copy what's on the canvas
-    var screenshot = get(0, 0, 640, 480);
-
+    var shot = get(0, 0, 640, 480);
+    var screenshot = new Screenshot(shot);
+  
     // push it to the screenshots array
     screenshots.push(screenshot);
-
   }
+  if (key === 's') {
+    // save something
+    save(screenshots[screenshots.length-1].shot, 'myImage.png');
+  }
+}
+
+function Screenshot(shot) {
+  this.shot = shot;
+  
+  // let's set up some hovered functions here
+  this.clicked = false;
+  this.hovered = false;
 }

@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
   width: 100%;
+  min-height: 602px;
   min-width: 662px;
   padding: 0;
   margin: 0;
@@ -10,10 +11,25 @@ body {
   background-color: #fafafa;
 }
 
+#toolbar-wrapper {
+  height: 100px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  margin-top: calc(50vh - 302px);
+}
+
+#toolbar {
+  height: 100%;
+  width: 642px;
+  margin: auto;
+  background-color: rgba(0,0,255,.3);
+}
+
 #canvas-wrapper {
   height: 100%;
   width: 662px;
-  margin-left: auto;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,10 +41,37 @@ canvas {
   outline: 1px solid #efefef;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 850px) {
+  #toolbar-wrapper {
+    height: 100%;
+    width: calc(100% - 662px);
+    float: left;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #toolbar {
+    height: 622px;
+    width: 100%;
+  }
+  
+  #canvas-wrapper {
+    margin: 0;
+    margin-left: auto;
+  }
+}
+
+@media screen and (min-width: 950px) {
+  
+  #toolbar-wrapper {
+    width: calc(50% - 330px);
+    margin-top: 0;
+  }
+  
   #canvas-wrapper {
     margin-left: 0;
     margin: auto;
-    position: relative;
   }
 }

@@ -6,6 +6,7 @@ var newpos = 0;
 var oldend = 640;
 var left, right, space;
 var count = 1; //for saving the images
+var timer = 0;
 
 function preload() {
   left = loadImage('assets/left.png');
@@ -29,23 +30,34 @@ function draw() {
   currentFilter.display();
   displayScreenshots();
   
+  for (var i = 0; i < screenshots.length; i++) {
+    console.log(screenshots[i].hovered);
+  }
+  
 }
 
 
 
 
 function mousePressed() {
-  currentFilter.state = 1;
-  if (currentFilter.state == 1) {
-    console.log('reaching here');
-     if (currentFilter.color == "normal") {
-       console.log('reaching here');
-       currentFilter.color = "grayscale";
-     } else if (currentFilter.color == "grayscale") {
-       currentFilter.color = "xray";
-     } else if (currentFilter.color == "xray") {
-       currentFilter.color = "normal";
-     }
+  // currentFilter.state = 1;
+  // if (currentFilter.state == 1) {
+  //   console.log('reaching here');
+  //   if (currentFilter.color == "normal") {
+  //     console.log('reaching here');
+  //     currentFilter.color = "grayscale";
+  //   } else if (currentFilter.color == "grayscale") {
+  //     currentFilter.color = "xray";
+  //   } else if (currentFilter.color == "xray") {
+  //     currentFilter.color = "normal";
+  //   }
+  // }
+  
+  for (var i = 0; i < screenshots.length; i++) {
+    if (screenshots[i].hovered) {
+      currentFilter.on = 0;
+      image(screenshots[i].shot, 0, 0, 640, 480);
+    }
   }
 }
 
@@ -60,12 +72,16 @@ function camFilter() {
   this.color = "normal";
   this.opacity;
   this.display = function() {
-    // console.log("display");
-    if(this.state === 0) {
-      normalVideoFeed(this.color);
+    if (this.on === 1) {
+      // console.log("display");
+      if(this.state === 0) {
+        normalVideoFeed(this.color);
+      } else {
+        background(255);
+        shapeVideoFeed(this.color,this.shape);
+      }
     } else {
-      background(255);
-      shapeVideoFeed(this.color,this.shape);
+      // don't do anything
     }
   }
 }
@@ -228,6 +244,26 @@ function displayScreenshots() {
     translate(newpos, 0);
     for (var i = 0; i < screenshots.length; i++) {
       image(screenshots[screenshots.length-1-i].shot, i * 160, 480, 160, 120);
+      screenshots[screenshots.length-1-i].posX = i * 160;
+      screenshots[screenshots.length-1-i].posY = 480;
+      
+      if ((mouseX - newpos > screenshots[screenshots.length-1-i].posX) &&
+      (mouseX - newpos < screenshots[screenshots.length-1-i].posX + 160) &&
+      (mouseY > screenshots[screenshots.length-1-i].posY)) {
+        fill(51, 51, 51, 150);
+        rect(screenshots[screenshots.length-1-i].posX, 
+        screenshots[screenshots.length-1-i].posY, 160, 120);
+        screenshots[screenshots.length-1-i].hovered = true;
+      } else {
+        screenshots[screenshots.length-1-i].hovered = false;
+      }
+      // console.log(screenshots[screenshots.length-1-i].x);
+      // console.log(screenshots[screenshots.length-1-i].y);
+      // console.log(mouseX);
+      // console.log(mouseY);
+      // if (screenshots[screenshots.length-1-i].hovered) {
+      //   console.log('hovered');
+      // }
     }
     pop();
     push();
@@ -257,8 +293,38 @@ function keyTyped() {
 
 function Screenshot(shot) {
   this.shot = shot;
-  
+  this.posX;
+  this.posY;
   // let's set up some hovered functions here
   this.clicked = false;
   this.hovered = false;
 }
+
+// function setup() {
+//   // create canvas
+//   var c = createCanvas(710, 400);
+//   background(100);
+//   // Add an event for when a file is dropped onto the canvas
+//   c.drop(gotFile);
+// }
+
+// function draw() {
+//   fill(255);
+//   noStroke();
+//   textSize(24);
+//   textAlign(CENTER);
+//   text('Drag an image file onto the canvas.', width/2, height/2);
+//   noLoop();
+// }
+
+// function gotFile(file) {
+//   // If it's an image file
+//   if (file.type === 'image') {
+//     // Create an image DOM element but don't show it
+//     var img = createImg(file.data).hide();
+//     // Draw the image onto the canvas
+//     image(img, 0, 0, width, height);
+//   } else {
+//     println('Not an image file!');
+//   }
+// }

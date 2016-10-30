@@ -23,6 +23,7 @@ function setup() {
   capture.size(640, 480);
   noStroke();
   background(255);
+  canvas.parent("#canvas-wrapper");
   
 }
 

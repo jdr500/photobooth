@@ -1,28 +1,34 @@
 html, body {
+  height: 100%;
+  width: 100%;
+  min-width: 662px;
   padding: 0;
   margin: 0;
-  width: 100%;
-  height: 100%;
 } 
 
 body {
   background-color: #fafafa;
 }
- 
-canvas {
-    position: absolute;
-    padding: 0;
-    top: 50%;
-    left: 50%;
-    margin-top: -310px;
-    margin-left: -330px;
-    border: 10px solid #fff;
-    outline: 1px solid #efefef;
-}
 
 #canvas-wrapper {
   height: 100%;
-  width: 660px;
-  margin: auto;
-  /*background-color: #fff;*/
+  width: 662px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+canvas {
+  padding: 0;
+  border: 10px solid #fff;
+  outline: 1px solid #efefef;
+}
+
+@media screen and (min-width: 900px) {
+  #canvas-wrapper {
+    margin-left: 0;
+    margin: auto;
+    position: relative;
+  }
 }

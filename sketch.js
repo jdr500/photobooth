@@ -12,6 +12,7 @@ function preload() {
   left = loadImage('assets/left.png');
   right = loadImage('assets/right.png');
   space = loadImage('assets/spacebar.png');
+  shutter = loadSound('assets/shutter.wav');
 }
 
 function setup() {
@@ -279,6 +280,7 @@ function keyTyped() {
     // copy what's on the canvas
     var shot = get(0, 0, 640, 480);
     var screenshot = new Screenshot(shot);
+    shutter.play();
   
     // push it to the screenshots array
     screenshots.push(screenshot);

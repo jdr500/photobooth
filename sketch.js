@@ -7,6 +7,9 @@ var oldend = 640;
 var left, right, space;
 var count = 1; //for saving the images
 var timer = 0;
+var canvas;
+var sticker = null;
+var stickerArray = [];
 
 function preload() {
   left = loadImage('assets/left.png');
@@ -17,28 +20,58 @@ function preload() {
 
 function setup() {
   pixelDensity(1);
-  var canvas = createCanvas(640, 600);
+  canvas = createCanvas(640, 600);
   capture = createCapture(VIDEO);
   capture.hide();
   capture.size(640, 480);
   noStroke();
   background(255);
   canvas.parent("#canvas-wrapper");
-  
+  canvas.drop(gotFile);
 }
 
 function draw() {
-  
   currentFilter.display();
   displayScreenshots();
-  
+
   for (var i = 0; i < screenshots.length; i++) {
     console.log(screenshots[i].hovered);
   }
-  
+  loadStickers();
 }
 
+function loadStickers() {
+  if (sticker && mouseY < 480 && currentFilter.on) {
+    push();
+    imageMode(CENTER);
+    image(sticker, mouseX, mouseY, 40, 40);
+    pop();
+  }  
+  for (var i = 0; i < stickerArray.length; i++) {
+    push();
+    imageMode(CENTER);
+    image(stickerArray[i].img, stickerArray[i].posX, 
+    stickerArray[i].posY, 40, 40);
+    pop();
+  }
+}
 
+function Sticker(img, x, y) {
+  this.img = img;
+  this.posX = x;
+  this.posY = y;
+}
+
+function gotFile(file) {
+  // If it's an image file
+  if (file.type === 'image') {
+    // Create an image DOM element but don't show it
+    sticker = loadImage(file.data, redraw);
+    console.log('got an image');
+  } else {
+    println('Not an image file!');
+  }
+}
 
 
 function mousePressed() {
@@ -54,18 +87,24 @@ function mousePressed() {
   //     currentFilter.color = "normal";
   //   }
   // }
-  
+  if (sticker && mouseY < 480 && currentFilter.on) {
+    var x = mouseX;
+    var y = mouseY;
+    var s = new Sticker(sticker, x, y);
+    stickerArray.push(s);
+  }
   for (var i = 0; i < screenshots.length; i++) {
     if (screenshots[i].hovered) {
       currentFilter.on = 0;
       image(screenshots[i].shot, 0, 0, 640, 480);
     }
   }
+  
 }
 
 function camFilter() {
   this.on = 1; // 1 means that live video feed is playing, 
-               // 0 means we're checking the screenshots
+  // 0 means we're checking the screenshots
   this.state = 0; // 0 is Normal Video Feed, 1 is Pointilism
   this.shape = {
     type: "ellipse",
@@ -76,11 +115,11 @@ function camFilter() {
   this.display = function() {
     if (this.on === 1) {
       // console.log("display");
-      if(this.state === 0) {
+      if (this.state === 0) {
         normalVideoFeed(this.color);
       } else {
         background(255);
-        shapeVideoFeed(this.color,this.shape);
+        shapeVideoFeed(this.color, this.shape);
       }
     } else {
       // don't do anything
@@ -113,11 +152,11 @@ function normalVideoFeed(colors) {
         var end = capture.pixels.length;
         var index2 = end - (x + capture.width * capture.height - y * capture.width) * 4 - 4;
         var index = (x + y * capture.width) * 4;
-        
+
         var r = capture.pixels[index2 + 0];
         var g = capture.pixels[index2 + 1];
         var b = capture.pixels[index2 + 2];
-        
+
         if (colors == 'normal') {
           // don't do anything, rgb is fine
         } else if (colors == 'xray') {
@@ -126,11 +165,11 @@ function normalVideoFeed(colors) {
           g = 255 - g;
           b = 255 - b;
         } else if (colors == 'grayscale') {
-          r = (r+g+b)/3;
+          r = (r + g + b) / 3;
           g = r;
           b = r;
         }
-        
+
         pixels[index + 0] = r;
         pixels[index + 1] = g;
         pixels[index + 2] = b;
@@ -163,9 +202,9 @@ function shapeVideoFeed(colors, shape) {
 
         // extract the colors here
         var r = capture.pixels[loc];
-        var g = capture.pixels[loc+1];
-        var b = capture.pixels[loc+2];
-        
+        var g = capture.pixels[loc + 1];
+        var b = capture.pixels[loc + 2];
+
         if (colors == 'normal') {
           // don't do anything, rgb is fine
         } else if (colors == 'xray') {
@@ -174,17 +213,17 @@ function shapeVideoFeed(colors, shape) {
           g = 255 - g;
           b = 255 - b;
         } else if (colors == 'grayscale') {
-          r = (r+g+b)/3;
+          r = (r + g + b) / 3;
           g = r;
           b = r;
         }
 
         // draw an ellipse using this color
         fill(r, g, b);
-        
-        if(shape.type == "ellipse") {
+
+        if (shape.type == "ellipse") {
           ellipse(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
-        } else if(shape.type == "rect") {
+        } else if (shape.type == "rect") {
           rectMode(CENTER);
           rect(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
         }
@@ -245,19 +284,19 @@ function displayScreenshots() {
     push();
     translate(newpos, 0);
     for (var i = 0; i < screenshots.length; i++) {
-      image(screenshots[screenshots.length-1-i].shot, i * 160, 480, 160, 120);
-      screenshots[screenshots.length-1-i].posX = i * 160;
-      screenshots[screenshots.length-1-i].posY = 480;
-      
-      if ((mouseX - newpos > screenshots[screenshots.length-1-i].posX) &&
-      (mouseX - newpos < screenshots[screenshots.length-1-i].posX + 160) &&
-      (mouseY > screenshots[screenshots.length-1-i].posY)) {
+      image(screenshots[screenshots.length - 1 - i].shot, i * 160, 480, 160, 120);
+      screenshots[screenshots.length - 1 - i].posX = i * 160;
+      screenshots[screenshots.length - 1 - i].posY = 480;
+
+      if ((mouseX - newpos > screenshots[screenshots.length - 1 - i].posX) &&
+        (mouseX - newpos < screenshots[screenshots.length - 1 - i].posX + 160) &&
+        (mouseY > screenshots[screenshots.length - 1 - i].posY)) {
         fill(51, 51, 51, 150);
-        rect(screenshots[screenshots.length-1-i].posX, 
-        screenshots[screenshots.length-1-i].posY, 160, 120);
-        screenshots[screenshots.length-1-i].hovered = true;
+        rect(screenshots[screenshots.length - 1 - i].posX,
+          screenshots[screenshots.length - 1 - i].posY, 160, 120);
+        screenshots[screenshots.length - 1 - i].hovered = true;
       } else {
-        screenshots[screenshots.length-1-i].hovered = false;
+        screenshots[screenshots.length - 1 - i].hovered = false;
       }
       // console.log(screenshots[screenshots.length-1-i].x);
       // console.log(screenshots[screenshots.length-1-i].y);
@@ -277,18 +316,25 @@ function displayScreenshots() {
 }
 
 function keyTyped() {
+  // if (keyCode == 27) {
+  //   currentFilter.on = 1;
+  // }
+  if (keyCode == 32 && currentFilter.on === 0) {
+    currentFilter.on = 1;
+  }
+  
   if (keyCode == 32) {
     // copy what's on the canvas
     var shot = get(0, 0, 640, 480);
     var screenshot = new Screenshot(shot);
     shutter.play();
-  
+
     // push it to the screenshots array
     screenshots.push(screenshot);
   }
   if (key === 's') {
     // save something
-    save(screenshots[screenshots.length-1].shot, 'myImage' + count + '.png');
+    save(screenshots[screenshots.length - 1].shot, 'myImage' + count + '.png');
     console.log('image saved!');
     count++;
   }

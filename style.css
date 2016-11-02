@@ -21,7 +21,7 @@ body {
 
 #toolbar {
   height: 100%;
-  width: 642px;
+  width: 640px;
   margin: auto;
   display: flex;
   box-sizing: border-box;
@@ -45,22 +45,42 @@ canvas {
 }
 
 .mode-wrapper,
-.size-wrapper {
+.size-wrapper,
+.color-wrapper {
   height: 100%;
   width: 25%;
   display: inline-block;
 }
 
-.size-wrapper span {
-  width: 2.4em;
+.size-wrapper {
+  width: 35%;
+}
+
+select {
+  width: calc(90% - 6em);
+  height: 2em;
+  margin-left: .3em;
+  outline: none;
+  border-radius: 3px;
+}
+
+span {
   display: inline-block;
   padding-top: 0.1em;
   font-family: sans-serif;
   color: #fff;
 }
 
+.size-wrapper span {
+  width: 2.4em;
+}
+
+#size-slider-display {
+  width: 1.5em;
+}
+
 .size-wrapper input {
-  width: calc(100% - 5em);
+  width: calc(100% - 8em);
   height: .9em;
 }
 

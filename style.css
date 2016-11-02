@@ -12,7 +12,7 @@ body {
 }
 
 #toolbar-wrapper {
-  height: 100px;
+  height: 50px;
   width: 100%;
   position: absolute;
   top: 0;
@@ -23,7 +23,10 @@ body {
   height: 100%;
   width: 642px;
   margin: auto;
-  background-color: rgba(0,0,255,.3);
+  display: flex;
+  box-sizing: border-box;
+  padding: 1em 1em;
+  background-color: rgba(0,0,0,.8);
 }
 
 #canvas-wrapper {
@@ -39,6 +42,26 @@ canvas {
   padding: 0;
   border: 10px solid #fff;
   outline: 1px solid #efefef;
+}
+
+.mode-wrapper,
+.size-wrapper {
+  height: 100%;
+  width: 25%;
+  display: inline-block;
+}
+
+.size-wrapper span {
+  width: 2.4em;
+  display: inline-block;
+  padding-top: 0.1em;
+  font-family: sans-serif;
+  color: #fff;
+}
+
+.size-wrapper input {
+  width: calc(100% - 5em);
+  height: .9em;
 }
 
 @media screen and (min-width: 850px) {

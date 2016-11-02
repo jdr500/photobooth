@@ -325,6 +325,7 @@ function keyTyped() {
   // }
   if (key === 'c') {
     currentFilter.on = 1;
+    stickerArray = [];
   }
   
   if (keyCode == 32) {

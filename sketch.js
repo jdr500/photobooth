@@ -159,12 +159,12 @@ function normalVideoFeed(colors) {
 
         if (colors == 'normal') {
           // don't do anything, rgb is fine
-        } else if (colors == 'xray') {
+        } else if (colors == 'negative') {
           // do 255 - r, 255 - g, 255 - b
           r = 255 - r;
           g = 255 - g;
           b = 255 - b;
-        } else if (colors == 'grayscale') {
+        } else if (colors == 'greyscale') {
           r = (r + g + b) / 3;
           g = r;
           b = r;
@@ -184,6 +184,8 @@ function normalVideoFeed(colors) {
 function shapeVideoFeed(colors, shape) {
   // expose the pixel array in our video stream
   capture.loadPixels();
+  
+  console.log(shape.size);
 
   // make sure we have a valid frame of video by ensuring that there is data
   // in this array
@@ -207,12 +209,12 @@ function shapeVideoFeed(colors, shape) {
 
         if (colors == 'normal') {
           // don't do anything, rgb is fine
-        } else if (colors == 'xray') {
+        } else if (colors == 'negative') {
           // do 255 - r, 255 - g, 255 - b
           r = 255 - r;
           g = 255 - g;
           b = 255 - b;
-        } else if (colors == 'grayscale') {
+        } else if (colors == 'greyscale') {
           r = (r + g + b) / 3;
           g = r;
           b = r;
@@ -223,7 +225,7 @@ function shapeVideoFeed(colors, shape) {
 
         if (shape.type == "ellipse") {
           ellipse(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
-        } else if (shape.type == "rect") {
+        } else if (shape.type == "square") {
           rectMode(CENTER);
           rect(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
         }
@@ -347,6 +349,28 @@ function Screenshot(shot) {
   // let's set up some hovered functions here
   this.clicked = false;
   this.hovered = false;
+}
+
+function updateTextInput(val) {
+  document.getElementById('size-slider-display').innerText = document.getElementById('size-slider').value;
+  currentFilter.shape.size = int(val);
+  console.log(currentFilter.shape.size);
+}
+
+function updateMode(mode) {
+  if (mode == "normal") {
+    currentFilter.state = 0;
+  } else if (mode == "ellipse") {
+    currentFilter.state = 1;
+    currentFilter.shape.type = "ellipse";
+  } else if (mode == "square") {
+    currentFilter.state = 1;
+    currentFilter.shape.type = "square";
+  }
+}
+
+function updateColor(color) {
+  currentFilter.color = color;
 }
 
 // function setup() {

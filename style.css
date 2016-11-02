@@ -12,7 +12,7 @@ body {
 }
 
 #toolbar-wrapper {
-  height: 100px;
+  height: 50px;
   width: 100%;
   position: absolute;
   top: 0;
@@ -21,9 +21,12 @@ body {
 
 #toolbar {
   height: 100%;
-  width: 642px;
+  width: 640px;
   margin: auto;
-  background-color: rgba(0,0,255,.3);
+  display: flex;
+  box-sizing: border-box;
+  padding: 1em 1em;
+  background-color: rgba(0,0,0,.8);
 }
 
 #canvas-wrapper {
@@ -41,6 +44,46 @@ canvas {
   outline: 1px solid #efefef;
 }
 
+.mode-wrapper,
+.size-wrapper,
+.color-wrapper {
+  height: 100%;
+  width: 25%;
+  display: inline-block;
+}
+
+.size-wrapper {
+  width: 35%;
+}
+
+select {
+  width: calc(90% - 6em);
+  height: 2em;
+  margin-left: .3em;
+  outline: none;
+  border-radius: 3px;
+}
+
+span {
+  display: inline-block;
+  padding-top: 0.1em;
+  font-family: sans-serif;
+  color: #fff;
+}
+
+.size-wrapper span {
+  width: 2.4em;
+}
+
+#size-slider-display {
+  width: 1.5em;
+}
+
+.size-wrapper input {
+  width: calc(100% - 8em);
+  height: .9em;
+}
+
 @media screen and (min-width: 850px) {
   #toolbar-wrapper {
     height: 100%;
@@ -55,6 +98,20 @@ canvas {
   #toolbar {
     height: 622px;
     width: 100%;
+    background-color: transparent;
+    flex-direction: column;
+  }
+  
+  .mode-wrapper,
+  .size-wrapper,
+  .color-wrapper {
+    height: 3em;
+    width: 100%;
+    display: block;
+  }
+  
+  span {
+    color: #333;
   }
   
   #canvas-wrapper {

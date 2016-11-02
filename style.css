@@ -98,6 +98,20 @@ span {
   #toolbar {
     height: 622px;
     width: 100%;
+    background-color: transparent;
+    flex-direction: column;
+  }
+  
+  .mode-wrapper,
+  .size-wrapper,
+  .color-wrapper {
+    height: 3em;
+    width: 100%;
+    display: block;
+  }
+  
+  span {
+    color: #333;
   }
   
   #canvas-wrapper {

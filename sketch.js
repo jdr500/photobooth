@@ -226,8 +226,10 @@ function shapeVideoFeed(colors, shape) {
         if (shape.type == "ellipse") {
           ellipse(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
         } else if (shape.type == "square") {
+          push()
           rectMode(CENTER);
           rect(capture.width - x - (.5 * shape.size), y + (.5 * shape.size), shape.size, shape.size);
+          pop();
         }
       }
     }
@@ -321,8 +323,9 @@ function keyTyped() {
   // if (keyCode == 27) {
   //   currentFilter.on = 1;
   // }
-  if (keyCode == 32 && currentFilter.on === 0) {
+  if (key === 'c') {
     currentFilter.on = 1;
+    stickerArray = [];
   }
   
   if (keyCode == 32) {

@@ -18,7 +18,16 @@
   <body>
     <div id="toolbar-wrapper">
       <div id="toolbar">
-        
+        <div class="mode-wrapper">
+          <select>
+            <option value="normal">Normal</option>
+            <option value="ellipse">Ellipse</option>
+            <option value="square">Square</option>
+          </select>
+        </div>
+        <div class="size-wrapper">
+          <input type="range" min="0" max="20" value="10" step="1"> 
+        </div>
       </div>
     </div>
     <div id="canvas-wrapper"></div>
